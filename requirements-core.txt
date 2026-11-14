@@ -1,0 +1,17 @@
+numpy
+pandas
+polars
+scipy
+matplotlib
+seaborn
+plotly
+openpyxl
+scikit-learn
+statsmodels
+imbalanced-learn
+joblib
+python-dotenv
+pytest
+black
+ruff
+loguru

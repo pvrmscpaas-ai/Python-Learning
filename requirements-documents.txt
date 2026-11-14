@@ -1,0 +1,23 @@
+pypdf
+pymupdf
+pdfplumber
+reportlab
+weasyprint
+pdf2image
+img2pdf
+python-docx
+docxtpl
+mammoth
+pypandoc
+pillow
+imageio
+cairosvg
+
+# Optional platform-dependent packages:
+# tensorflow
+# camelot-py
+# tabula-py
+# ocrmypdf
+# wand
+# comtypes
+# python-magic

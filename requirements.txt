@@ -1,0 +1,5 @@
+# Install all categories with one command.
+-r requirements-core.txt
+-r requirements-ai.txt
+-r requirements-web.txt
+-r requirements-documents.txt

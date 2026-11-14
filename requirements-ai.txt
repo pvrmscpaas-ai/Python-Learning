@@ -1,0 +1,12 @@
+openai
+transformers
+torch
+sentence-transformers
+langchain
+llama-index
+xgboost
+lightgbm
+catboost
+spacy
+nltk
+opencv-python
