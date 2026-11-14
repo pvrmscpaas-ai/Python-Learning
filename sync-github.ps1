@@ -27,7 +27,7 @@ $folderName = Split-Path -Leaf $repoPath
 function Invoke-Git {
     param([Parameter(Mandatory)][string[]]$Arguments)
 
-    & git -C $repoPath @Arguments
+    & git -c "safe.directory=$repoPath" -C $repoPath @Arguments
     if ($LASTEXITCODE -ne 0) {
         throw "Git command failed: git $($Arguments -join ' ')"
     }
@@ -37,7 +37,7 @@ if (-not (Test-Path (Join-Path $repoPath ".git"))) {
     throw "No Git repository was found in '$repoPath'. Run 'git init' first."
 }
 
-$originUrl = (& git -C $repoPath remote get-url origin 2>$null)
+$originUrl = (& git -c "safe.directory=$repoPath" -C $repoPath remote get-url origin 2>$null)
 if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($originUrl)) {
     throw "No 'origin' remote is configured. Add the GitHub repository with 'git remote add origin <url>'."
 }
@@ -45,18 +45,18 @@ if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($originUrl)) {
 Write-Host "Work folder : $folderName"
 Write-Host "GitHub remote: $originUrl"
 
-$currentBranch = (& git -C $repoPath branch --show-current).Trim()
+$currentBranch = (& git -c "safe.directory=$repoPath" -C $repoPath branch --show-current).Trim()
 if ($currentBranch -ne $branch) {
     Write-Host "Switching from '$currentBranch' to '$branch'..."
     Invoke-Git @("switch", "-C", $branch)
 }
 
-$status = @( & git -C $repoPath status --porcelain )
+$status = @( & git -c "safe.directory=$repoPath" -C $repoPath status --porcelain )
 if ($status.Count -gt 0) {
     Write-Host "Staging local changes..."
     Invoke-Git @("add", "--all")
 
-    $stagedChanges = @( & git -C $repoPath diff --cached --name-only )
+    $stagedChanges = @( & git -c "safe.directory=$repoPath" -C $repoPath diff --cached --name-only )
     if ($stagedChanges.Count -gt 0) {
         Write-Host "Creating commit: $Message"
         Invoke-Git @("commit", "-m", $Message)
@@ -67,7 +67,7 @@ else {
 }
 
 Write-Host "Pulling latest changes from origin/$branch..."
-& git -C $repoPath pull --rebase origin $branch
+& git -c "safe.directory=$repoPath" -C $repoPath pull --rebase origin $branch
 if ($LASTEXITCODE -ne 0) {
     throw "Pull failed. Resolve conflicts, then run this script again."
 }
